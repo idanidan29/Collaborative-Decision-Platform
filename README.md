@@ -39,7 +39,7 @@ A web/mobile platform that allows users to collaboratively select items across v
 
 ## Technical Highlights
 
-* **Frontend:** React (Web) + optional React Native or Flutter for mobile apps.
+* **Frontend:** next.js + optional React Native or Flutter for mobile apps.
 * **Backend:** Node.js/Express or FastAPI.
 * **Database:** PostgreSQL for users, sessions, friends; Redis for real-time session state.
 * **Real-Time Communication:** WebSockets or Socket.io.
@@ -48,8 +48,29 @@ A web/mobile platform that allows users to collaboratively select items across v
 
 ## Architecture Overview
 
-* **Frontend Layer:** Provides a responsive UI for browsing, session management, chat, and Tinder-style item voting.
-* **Backend Layer:** Handles user authentication, session management, friend relationships, and preference aggregation.
-* **Real-Time Layer:** Synchronizes user actions and voting in sessions using WebSockets.
-* **Database Layer:** Stores user profiles, friend lists, session data, and item metadata.
-* **External API Layer:** Fetches category-specific metadata for items.
+```
++------------------+        +------------------+        +------------------+
+|   Frontend UI    | <----> |   Backend API    | <----> |   Database       |
+|  (React/Web)     |        | (Node.js/FastAPI)|        |  (PostgreSQL)    |
++------------------+        +------------------+        +------------------+
+         |                           |
+         | WebSockets / socket.io     |
+         v                           v
++------------------+        +------------------+
+| Real-Time Engine | <----> | Redis (Session   |
+|                  |        |  State Cache)    |
++------------------+        +------------------+
+         |
+         v
++------------------+
+| External APIs    |
+| (TMDb, etc.)     |
++------------------+
+```
+
+* **Frontend Layer:** Handles UI for browsing, session management, chat, and item voting.
+* **Backend Layer:** Manages authentication, sessions, friends, and preference logic.
+* **Real-Time Layer:** Synchronizes live user actions using WebSockets.
+* **Database Layer:** Stores user profiles, sessions, friends, and item metadata.
+* **External API Layer:** Fetches category-specific data for items.
+  ``
